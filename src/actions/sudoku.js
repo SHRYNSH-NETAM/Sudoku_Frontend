@@ -1,4 +1,5 @@
 import * as api from '../api'
+import { useStopwatch } from 'react-timer-hook';
 
 export const getSudoku =  (mode) => async (dispatch) => {
 
@@ -14,7 +15,7 @@ export const getSudoku =  (mode) => async (dispatch) => {
 export const validateSudoku = (data) => async (dispatch) => {
     try {
         const result = await api.validateSudoku(data);
-        dispatch({type:'VALIDATE_SUDOKU', result})
+        dispatch({type:'GET_RESULT', result})
         return true
     } catch (error) {
         console.log(error.message);

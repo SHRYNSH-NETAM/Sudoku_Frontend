@@ -126,15 +126,19 @@ width: calc(var(--nav-size)/1.5);
 
 
 .easy-color-text {
+  font-weight: 500;
   color: var(--easy-mode-color);
 }
 .medium-color-text {
+  font-weight: 500;
   color: var(--medium-mode-color);
 }
 .hard-color-text {
+  font-weight: 500;
   color: var(--hard-mode-color);
 }
 .extreme-color-text {
+  font-weight: 500;
   color: var(--extreme-mode-color);
 }
 
@@ -497,9 +501,9 @@ span {
   color: var(--given-color);
 }
 
-.main-grid-cell.inserted {
+/* .main-grid-cell.inserted {
   color: var(--inserted-color);
-}
+} */
 
 .main-grid-cell.selected {
   background-color: rgba(82, 0, 198, 0.50);

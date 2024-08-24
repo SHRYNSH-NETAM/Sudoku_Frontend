@@ -7,8 +7,12 @@ import jwtDecode from 'jwt-decode'
 
 import Navbar from './Navbar/Navbar'
 import { Center, Flex, Stat, StatLabel, StatNumber, Text, StatGroup, 
-    Button, ButtonGroup, Heading, Box
+    Button, ButtonGroup, Heading, Box, SkeletonText,
+    Skeleton,
+    SimpleGrid,
+    HStack
  } from '@chakra-ui/react'
+import { Card, CardBody, CardFooter, CardHeader, Stack } from 'react-bootstrap'
 
 
 const User = ({myStatistics}) => {
@@ -18,6 +22,7 @@ const User = ({myStatistics}) => {
     const [sureToDelete, setSureToDelete] = useState(false)
 
     const [username, setUsername] = useState("")
+    const [loading,setLoading] = useState(false)
 
     const handleSureToDelete = () => {
         setSureToDelete((prev) => !prev)
@@ -35,14 +40,17 @@ const User = ({myStatistics}) => {
     }
 
     useEffect(() => {
-
-        if(!localStorage.getItem('sudokuUser'))
-            navigate('/login')
-        else
-            dispatch(getMyStatistics())
-            //get username from jwt
-            let decodedToken = jwtDecode(JSON.parse(localStorage.getItem('sudokuUser')).token)
-            setUsername(decodedToken?.username)
+        const loadStats = async () => {
+            setLoading(false);
+            if(!localStorage.getItem('sudokuUser'))
+                navigate('/login')
+            else
+                await dispatch(getMyStatistics())
+                let decodedToken = jwtDecode(JSON.parse(localStorage.getItem('sudokuUser')).token)
+                setUsername(decodedToken?.username)
+            setLoading(true);
+        };
+        loadStats();
     }, [dispatch])
 
     const getUsername = () => {
@@ -79,7 +87,8 @@ const User = ({myStatistics}) => {
             </Center>
             <Center height='700px' width='500px'>
                 <Box>
-                    <Heading mb={4}>Total Sudoku Solved:</Heading>
+                <Heading mb={4}>Total Sudoku Solved:</Heading>
+                <Skeleton isLoaded={loading}>
                     <StatGroup gap={100}>
                         <Stat>
                             <StatLabel color='green'>Easy:</StatLabel>
@@ -98,6 +107,7 @@ const User = ({myStatistics}) => {
                             <StatNumber>{myStatistics[3]}</StatNumber>
                         </Stat>
                     </StatGroup>
+                </Skeleton>
                     <ButtonGroup gap='2'>
                         <Button size='lg' colorScheme='red' mt='24px' onClick={logout}>
                             Log out

@@ -26,8 +26,6 @@ const sudokuReducer = (sudoku = [], action) => {
                 gridToBeFilled: newGridToBeFilled, 
                 history: updatedHistory
             }
-        case "VALIDATE_SUDOKU":
-            
         case "SET_SUDOKU":        
             let newSudoku = action?.data
             return {...newSudoku}

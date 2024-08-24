@@ -1,6 +1,6 @@
 import { Center,Heading,Input,Link,Button,Text,HStack,Flex,Checkbox,Spacer,
-    FormControl,FormLabel,FormErrorMessage} from '@chakra-ui/react'
-import { useState } from 'react';
+    FormControl,FormLabel,Spinner} from '@chakra-ui/react'
+import { useState,useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { signin } from '../../actions/auth'
 import { useDispatch } from 'react-redux'
@@ -14,18 +14,30 @@ function Login(){
     password: '',
     usernameoremail: '',
   })
+  const [isLogging,setIsLogging] = useState(false);
+
+  useEffect(() => {
+      if(localStorage.sudokuUser){
+        navigate("/")
+      }
+  }, []);
+
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value})
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+      setIsLogging(true);
       e.preventDefault()
-      dispatch(signin(formData, navigate, setErrorHandler))
+      await dispatch(signin(formData, navigate, setErrorHandler))
+      setIsLogging(false);
   }
   return (
     <>
       <Navbar />
-      <Center h='100vh'>
+      {isLogging ? <Center mt="270px"><Spinner thickness='6px' speed='0.80s' emptyColor='gray.200' color='blue.500' size='xl' /></Center>
+      :
+      <Center mt="100px">
           <HStack spacing='20px' flexDirection='column' bg='white' w='450px' p={4} borderWidth='1px' borderRadius='lg'>
             <Heading>Login</Heading>
             <FormControl onSubmit={handleSubmit}>
@@ -48,7 +60,7 @@ function Login(){
               </Link>
             </Text>
           </HStack>
-      </Center>
+      </Center>}
     </>
   );
 }

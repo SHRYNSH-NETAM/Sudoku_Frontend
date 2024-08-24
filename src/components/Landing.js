@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from './Navbar/Navbar'
 import '../css/index.css'
-import { Flex,Center, Button,Box,Heading,StatGroup,Stat,StatLabel,StatNumber, ButtonGroup, SimpleGrid, Container } from '@chakra-ui/react'
+import { Center, Button,Box,Heading,StatGroup,Stat,StatLabel,StatNumber, SimpleGrid, Container, Highlight, HStack, Tooltip } from '@chakra-ui/react'
 
 const Landing = () => {
 
@@ -181,7 +181,7 @@ const Landing = () => {
         <Container maxW='container.xl'>
         <SimpleGrid columns={[1,1,1,2]} mt={[5, 25, 85]} spacing={5}>
             <Center>
-                <Box className="main-sudoku-grid">
+                <div className="main-sudoku-grid">
                     {grids[visibleGrid].map((elem, row) =>
                     elem.map((number, col) => (
                         <div
@@ -199,11 +199,15 @@ const Landing = () => {
                         </div>
                     ))
                     )}
-                </Box>
+                </div>
             </Center>
             <Center>
                 <Box>
-                    <Heading mb={4} size='lg'>Solve Sudoku Online on the #7 Site!</Heading>
+                    <HStack>
+                    <Heading mb={4} size='lg'>Solve Sudoku Online on the</Heading>
+                    <Tooltip label="Thala for a Reason 😑" color='yellow.300' placement='top'><Heading mb={4} size='lg'><Highlight query='7' styles={{color:'yellow.300'}}>#7</Highlight></Heading></Tooltip>
+                    <Heading mb={4} size='lg'>Site!</Heading>
+                    </HStack>
                     <StatGroup>
                         <Stat>
                             <StatLabel>Total Sudoku Solved Today</StatLabel>

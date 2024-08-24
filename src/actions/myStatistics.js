@@ -9,10 +9,10 @@ export const getMyStatistics = () => async (dispatch) => {
     }
 }
 
-export const updateStatistics = (data) => async (dispatch) => {
-    try {
-        await api.updateStatistics(data)
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+// export const updateStatistics = (data) => async (dispatch) => {
+//     try {
+//         await api.updateStatistics(data)
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }

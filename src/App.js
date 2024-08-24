@@ -4,12 +4,11 @@ import Game from './components/Game'
 import Home from './components/Home'
 import BottomBanner from './components/BottomBanner'
 import Landing from './components/Landing'
-import Auth from './components/Auth/Auth'
 import User from './components/UserProfile'
+import Stat from './components/Profile'
 import Controller from './components/Controller'
 import Login from './components/Auth/login'
 import Signup from './components/Auth/signup'
-import { Container } from '@chakra-ui/react'
 
 const App = () => {
   
@@ -31,11 +30,11 @@ const App = () => {
               <Route path="/" element={<Landing />}></Route>
               <Route path="/home" element={<Home />}></Route>
               
-              <Route path="/auth" element={<Auth />}></Route>
               <Route path="/login" element={<Login />}></Route>
               <Route path="/signup" element={<Signup />}></Route>
               <Route path="/game" element={<Game />}></Route>
               <Route path="/myprofile" element={<User />} />
+              {/* <Route path="/stat" element={<Stat />} /> */}
               {/* <Route path="/user/:username" element={<User />}></Route> */}
             </Routes>
 

@@ -12,7 +12,7 @@ const Controller = () => {
             let decodedToken = jwtDecode(JSON.parse(localStorage.getItem('sudokuUser')).token)
             if(decodedToken.exp < Date.now()/1000) {
                 localStorage.removeItem('sudokuUser')
-                navigate('/auth')
+                navigate('/login')
             }
         }
     })
