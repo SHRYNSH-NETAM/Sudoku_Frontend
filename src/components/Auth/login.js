@@ -9,7 +9,7 @@ import Navbar from '../Navbar/Navbar'
 function Login(){
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [errorHandler, setErrorHandler] = useState({hasError: false, message:""})
+  const [recError, setRecError] = useState({hasError: false, message:""})
   const [formData, setFormData] = useState({
     password: '',
     usernameoremail: '',
@@ -29,7 +29,7 @@ function Login(){
   const handleSubmit = async (e) => {
       setIsLogging(true);
       e.preventDefault()
-      await dispatch(signin(formData, navigate, setErrorHandler))
+      await dispatch(signin(formData, navigate,setRecError))
       setIsLogging(false);
   }
   return (
@@ -48,11 +48,7 @@ function Login(){
               <FormLabel>Password<Text as='span' color='red'> *</Text></FormLabel>
               <Input type='password' name='password' value={formData.password} onChange={handleChange}/>
             </FormControl>
-            <Flex w='100%'>
-                {/* <Checkbox isChecked={remember} onChange={(e) => setRemember(e.target.checked)}>Remember Me</Checkbox> */}
-                <Spacer />
-                <Link color='teal.500' onClick={()=>navigate("/forget")}>Forgot Password?</Link>
-            </Flex>
+            {recError.hasError ? <Center><Text color='tomato'>{recError.message}</Text></Center> : <></>}
             <Button colorScheme='purple' size='lg' w='100%' onClick={handleSubmit}>Login</Button>
             <Text>Don't have an account?{' '}
               <Link color='teal.500' onClick={()=>navigate("/signup")}>

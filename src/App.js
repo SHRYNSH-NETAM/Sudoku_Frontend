@@ -1,11 +1,9 @@
 import React from 'react'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Game from './components/Game'
-import Home from './components/Home'
 import BottomBanner from './components/BottomBanner'
 import Landing from './components/Landing'
 import User from './components/UserProfile'
-import Stat from './components/Profile'
 import Controller from './components/Controller'
 import Login from './components/Auth/login'
 import Signup from './components/Auth/signup'
@@ -28,8 +26,6 @@ const App = () => {
             <Controller />
             <Routes>
               <Route path="/" element={<Landing />}></Route>
-              <Route path="/home" element={<Home />}></Route>
-              
               <Route path="/login" element={<Login />}></Route>
               <Route path="/signup" element={<Signup />}></Route>
               <Route path="/game" element={<Game />}></Route>

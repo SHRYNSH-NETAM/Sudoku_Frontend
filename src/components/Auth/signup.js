@@ -1,4 +1,4 @@
-import { Center,Heading,Input,Link,Button,Text,HStack,FormControl,FormLabel,FormErrorMessage} from '@chakra-ui/react'
+import { Center,Heading,Input,Link,Button,Text,HStack,FormControl,FormLabel,FormErrorMessage, Spinner} from '@chakra-ui/react'
   import { useState } from 'react';
   import { useNavigate  } from "react-router-dom";
   import { useDispatch } from 'react-redux'
@@ -14,23 +14,28 @@ import { Center,Heading,Input,Link,Button,Text,HStack,FormControl,FormLabel,Form
         password: '',
         repeatPassword: '',
     })
-    const [errorHandler, setErrorHandler] = useState({hasError: false, message:""})
+    const [recError, setRecError] = useState("")
     const [error, setError] = useState({
         email: false,
         pass: false,
         checkpass: false,
     })
+    const [isLogging,setIsLogging] = useState(false);
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value})
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        dispatch(signup(formData, navigate, setErrorHandler))
+    const handleSubmit = async (e) => {
+      setIsLogging(true);
+      e.preventDefault();
+      await dispatch(signup(formData, navigate, setRecError));
+      setIsLogging(false);
     }
     return (
       <>
         <Navbar />
+        {isLogging ? <Center mt="270px"><Spinner thickness='6px' speed='0.80s' emptyColor='gray.200' color='blue.500' size='xl' /></Center>
+        : 
         <Center h='100vh'>
             <HStack spacing='15px' flexDirection='column' bg='white' w='450px' p={4} borderWidth='1px' borderRadius='lg'>
               <Heading>SignUp</Heading>
@@ -56,6 +61,7 @@ import { Center,Heading,Input,Link,Button,Text,HStack,FormControl,FormLabel,Form
               {/* <Flex w='100%' justify='flex-start'>
                 <Checkbox isChecked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)}>I Accept all Terms & Conditions.</Checkbox>
               </Flex> */}
+              {recError ? <Center><Text color='tomato'>{recError}</Text></Center> : <></>}
               <Button colorScheme='purple' size='lg' w='100%' onClick={handleSubmit}>Signup</Button>
               <Text>Already have an account?{' '}
                 <Link color='teal.500' onClick={()=>navigate("/login")}>
@@ -63,7 +69,7 @@ import { Center,Heading,Input,Link,Button,Text,HStack,FormControl,FormLabel,Form
                 </Link>
               </Text>
             </HStack>
-        </Center>
+        </Center>}
       </>
     );
   }

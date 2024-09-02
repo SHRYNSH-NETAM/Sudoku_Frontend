@@ -18,6 +18,7 @@ export const validateSudoku = (data) => async (dispatch) => {
         dispatch({type:'GET_RESULT', result})
         return true
     } catch (error) {
+        dispatch({type:'GET_ERROR', error})
         console.log(error.message);
         return false
     }

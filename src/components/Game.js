@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { React,useEffect, useState } from 'react'
 import {getSudoku, validateSudoku} from '../actions/sudoku'
 import { useDispatch, connect, useSelector } from 'react-redux'
 import {useLocation, useNavigate} from 'react-router-dom'
@@ -21,7 +21,7 @@ const Game = ({sudoku}) => {
     const {search} = location
     const myResult = useSelector((state) => state.myResult);
 
-    const { seconds,minutes,hours,days,start,pause,reset } = useStopwatch({ autoStart: true });
+    const { seconds,minutes,hours,days,start,pause,reset,totalSeconds } = useStopwatch({ autoStart: true });
 
     const formatNumber = (num) => String(num).padStart(2, '0');
 
@@ -43,9 +43,11 @@ const Game = ({sudoku}) => {
     const [resultModal,setResultModal] = useState("");
     const [mistakes,setMistakes] = useState(0);
     const [insertedColor,SetInsertedColor] = useState('blue')
+    const [errorHandler, setErrorHandler] = useState({hasError: false, message:""})
 
 
     useEffect(() => {
+
         const loadSudoku = async () => {
             setLoading(true);
             if(!sessionStorage.currentSudoku) { 
@@ -63,6 +65,7 @@ const Game = ({sudoku}) => {
         };
 
         loadSudoku();
+
     }, [dispatch, navigate]);
 
     const handleSelected = (idx) => {
@@ -70,20 +73,15 @@ const Game = ({sudoku}) => {
     }
 
     const findMistake = (number,row,col) => {
-        console.log({number})
         let ismistakeExist = false;
         for(let i=0; i<9; i++){
             if(col!==i && sudoku?.gridToBeFilled[row][i] === number){
                 ismistakeExist = true;
-                // console.log("row")
-                // console.log({row,col})
             }
         }
         for(let i=0; i<9; i++){
             if(row!==i && sudoku?.gridToBeFilled[i][col] === number){
                 ismistakeExist = true;
-                // console.log("col")
-                // console.log({row,col})
             }
         }
         let startRow = row - row%3
@@ -92,8 +90,6 @@ const Game = ({sudoku}) => {
             for (let j = 0; j < 3; j++) {
                 if ((i!==row-startRow || j!==col-startCol) && sudoku?.gridToBeFilled[i+startRow][j+startCol] === number) {
                     ismistakeExist = true;
-                    // console.log("cell")
-                    // console.log({row,col})
                 }
             }
         }
@@ -127,29 +123,27 @@ const Game = ({sudoku}) => {
     }
 
     const validateinServer = async () => {
+        if(!localStorage.sudokuUser) return true;
         const valid = await dispatch(validateSudoku({gridToBeFilled: sudoku.gridToBeFilled, history: JSON.parse(sessionStorage.getItem('currentSudoku')).history}));
         return valid
     }
 
     const updateSudokuGrid = async (number) => {
-        let row = Math.floor(selectedCellIdx/9)
-        let col = selectedCellIdx%9
+        let row = Math.floor(selectedCellIdx/9);
+        let col = selectedCellIdx%9;
         if(sudoku?.gridWithBlanks[row][col] === 0) {
             dispatch({type: "UPDATE_SUDOKU", data: {number, row, col}});
-        }
+        };
 
         findMistake(number,row,col);
 
         if (sudokuIsCompleted()) {
             pause();
             onOpen();
-            if (sudokuIsRight() && await validateinServer()) {
+            if (await validateinServer()) {
                 setResultModal("Sudoku Completed!");
                 setResultLoading(false);
                 sessionStorage.removeItem('currentSudoku');
-                // if (localStorage.getItem('sudokuUser')) {
-                //     dispatch(updateStatistics({ mode, user: localStorage.getItem('sudokuUser') }));
-                // }
             } else {
                 setResultModal("Your Sudoku has some errors!");
                 setResultLoading(false);
@@ -216,7 +210,6 @@ const Game = ({sudoku}) => {
         };
         sessionStorage.setItem('currentSudoku', JSON.stringify(newSudoku))
         dispatch({type:"SET_SUDOKU", data: newSudoku})
-        reset();
     }
     
     return (
@@ -259,21 +252,35 @@ const Game = ({sudoku}) => {
                                 <Center>
                                     {resultModal==="Sudoku Completed!" ?
                                     <ModalBody>
-                                        <Heading size='md'>Time Taken:</Heading>
-                                        <Text>
+                                        {myResult?.result ?
+                                        <><Heading size='md'>Time Taken:</Heading>
+                                         <Text>
                                             {Math.floor(myResult?.result?.[2])} Hours{' '}
                                             {Math.floor((myResult?.result?.[2] % 1) * 60)} Min{' '}
                                             {Math.round((((myResult?.result?.[2] % 1) * 60) % 1) * 60)} Sec
                                         </Text>
-                                        <Center><Text as='b'>Mistake: {myResult?.result?.[0]} Cheats/Guess: {myResult?.result?.[1]}</Text></Center>
+                                        <Center><Text as='b'>Mistake: {myResult?.result?.[0]} Cheats/Guess: {myResult?.result?.[1]}</Text></Center></>
+                                        :
+                                        <>
+                                        <Heading size='md'>Time Taken:</Heading>
+                                        <Text>
+                                            {hours} Hours{' '}
+                                            {minutes} Min{' '}
+                                            {seconds} Sec
+                                        </Text>
+                                        <Center><Text>For Saving Record! Please Log In.</Text></Center>
+                                        </>}
                                     </ModalBody>
                                     :
-                                     <ModalBody></ModalBody>}
+                                    <ModalBody>
+                                        <Text>{myResult?.response?.data}</Text>
+                                    </ModalBody>}
                                 </Center>
                                 <Center>
                                     <ModalFooter>
                                         <Stack direction='row' spacing={4}>
                                             {resultModal==="Sudoku Completed!" ? <></> : <Button onClick={() => keepTrying()}>Keep Trying!</Button>}
+                                            {myResult?.result ? <></> : <Button onClick={() => navigate("/login")}>Log In</Button>}
                                             <Menu>
                                                 {({ isOpen }) => (
                                                     <>
