@@ -9,8 +9,7 @@ import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Box, Square, Stack, SimpleGrid, Center, Container, useDisclosure, Modal, ModalOverlay, 
     ModalContent, ModalHeader, ModalFooter, Button, Text, HStack, Menu, MenuButton, MenuList, MenuItem, 
     Heading,
-    Spinner,
-    PinInput} from '@chakra-ui/react'
+    Spinner} from '@chakra-ui/react'
 import { ModalBody } from 'react-bootstrap'
 
 const Game = ({sudoku}) => {
@@ -21,7 +20,7 @@ const Game = ({sudoku}) => {
     const {search} = location
     const myResult = useSelector((state) => state.myResult);
 
-    const { seconds,minutes,hours,days,start,pause,reset,totalSeconds } = useStopwatch({ autoStart: true });
+    const { seconds,minutes,hours,days,start,pause,reset } = useStopwatch({ autoStart: true });
 
     const formatNumber = (num) => String(num).padStart(2, '0');
 
@@ -43,7 +42,6 @@ const Game = ({sudoku}) => {
     const [resultModal,setResultModal] = useState("");
     const [mistakes,setMistakes] = useState(0);
     const [insertedColor,SetInsertedColor] = useState('blue')
-    const [errorHandler, setErrorHandler] = useState({hasError: false, message:""})
 
 
     useEffect(() => {
@@ -140,7 +138,7 @@ const Game = ({sudoku}) => {
         if (sudokuIsCompleted()) {
             pause();
             onOpen();
-            if (await validateinServer()) {
+            if (sudokuIsRight && await validateinServer()) {
                 setResultModal("Sudoku Completed!");
                 setResultLoading(false);
                 sessionStorage.removeItem('currentSudoku');
@@ -280,7 +278,6 @@ const Game = ({sudoku}) => {
                                     <ModalFooter>
                                         <Stack direction='row' spacing={4}>
                                             {resultModal==="Sudoku Completed!" ? <></> : <Button onClick={() => keepTrying()}>Keep Trying!</Button>}
-                                            {myResult?.result ? <></> : <Button onClick={() => navigate("/login")}>Log In</Button>}
                                             <Menu>
                                                 {({ isOpen }) => (
                                                     <>

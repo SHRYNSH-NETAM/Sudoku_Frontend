@@ -1,5 +1,5 @@
-import { Center,Heading,Input,Link,Button,Text,HStack,Flex,Checkbox,Spacer,
-    FormControl,FormLabel,Spinner} from '@chakra-ui/react'
+import { Center,Heading,Input,Link,Button,Text,HStack, 
+  FormControl,FormLabel,Spinner} from '@chakra-ui/react'
 import { useState,useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { signin } from '../../actions/auth'

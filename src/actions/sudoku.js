@@ -1,5 +1,4 @@
 import * as api from '../api'
-import { useStopwatch } from 'react-timer-hook';
 
 export const getSudoku =  (mode) => async (dispatch) => {
 

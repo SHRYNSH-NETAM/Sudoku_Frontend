@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
-import { Flex,Box,Heading,Spacer,ButtonGroup,Button,Avatar,Text } from '@chakra-ui/react'
+import { Flex,Box,Heading,Spacer,ButtonGroup,Button,Text } from '@chakra-ui/react'
 
 const Navbar = () => {
 

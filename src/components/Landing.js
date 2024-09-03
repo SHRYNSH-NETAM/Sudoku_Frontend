@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from './Navbar/Navbar'
 import '../css/index.css'
-import { Center, Button,Box,Heading,StatGroup,Stat,StatLabel,StatNumber, SimpleGrid, Container, Highlight, HStack, Tooltip } from '@chakra-ui/react'
+import { Center, Button,Box,Heading, SimpleGrid, Container } from '@chakra-ui/react'
 
 const Landing = () => {
 
@@ -203,12 +203,13 @@ const Landing = () => {
             </Center>
             <Center>
                 <Box>
-                    <HStack>
+                    <Heading mb={4} size='lg'>Solve Sudoku Anytime, Anywhere Online!</Heading>
+                    {/* <HStack>
                     <Heading mb={4} size='lg'>Solve Sudoku Online on the</Heading>
                     <Tooltip label="Thala for a Reason 😑" color='yellow.300' placement='top'><Heading mb={4} size='lg'><Highlight query='7' styles={{color:'yellow.300'}}>#7</Highlight></Heading></Tooltip>
                     <Heading mb={4} size='lg'>Site!</Heading>
-                    </HStack>
-                    <StatGroup>
+                    </HStack> */}
+                    {/* <StatGroup>
                         <Stat>
                             <StatLabel>Total Sudoku Solved Today</StatLabel>
                             <StatNumber>345,670</StatNumber>
@@ -217,7 +218,7 @@ const Landing = () => {
                             <StatLabel>Solving Now</StatLabel>
                             <StatNumber>45,243</StatNumber>
                         </Stat>
-                    </StatGroup>
+                    </StatGroup> */}
                     <Center>
                     <SimpleGrid columns={[1,2,3]} w={[200, 350, 500]} spacing={[1,5]}>
                         {

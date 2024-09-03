@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { useSelector, useDispatch, connect } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getMyStatistics } from '../actions/myStatistics'
 import { deleteAccount } from '../actions/auth'
@@ -7,12 +7,7 @@ import jwtDecode from 'jwt-decode'
 
 import Navbar from './Navbar/Navbar'
 import { Center, Flex, Stat, StatLabel, StatNumber, Text, StatGroup, 
-    Button, ButtonGroup, Heading, Box, SkeletonText,
-    Skeleton,
-    SimpleGrid,
-    HStack
- } from '@chakra-ui/react'
-import { Card, CardBody, CardFooter, CardHeader, Stack } from 'react-bootstrap'
+    Button, ButtonGroup, Heading, Box, Skeleton } from '@chakra-ui/react'
 
 
 const User = ({myStatistics}) => {
