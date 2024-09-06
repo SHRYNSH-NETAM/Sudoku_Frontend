@@ -216,7 +216,7 @@ const Game = ({sudoku}) => {
                 {loading ? 
                 <Center mt="250px"><Spinner thickness='6px' speed='0.80s' emptyColor='gray.200' color='blue.500' size='xl' /></Center>
                 :
-                <SimpleGrid columns={[1,1,1,2]} mt={[5, 25, 85]} spacing={[20,10, 5]}>
+                <SimpleGrid columns={[1,1,1,2]} mt={[5, 25, 85]} spacing={[20,10,5]}>
                     <Center>
                             <div className="main-game active" id="game-screen">
                                 <div className="main-sudoku-grid">

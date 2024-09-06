@@ -6,16 +6,16 @@ import { deleteAccount } from '../actions/auth'
 import jwtDecode from 'jwt-decode'
 
 import Navbar from './Navbar/Navbar'
-import { Center, Flex, Stat, StatLabel, StatNumber, Text, StatGroup, 
-    Button, ButtonGroup, Heading, Box, Skeleton } from '@chakra-ui/react'
-
+import { Center, Flex, Stat, StatLabel, StatNumber, Text, Button, ButtonGroup, 
+    Heading, Box, Skeleton, Container, SimpleGrid, useDisclosure,
+    Modal, ModalContent, ModalFooter, ModalBody, Stack, ModalOverlay, Spacer} from '@chakra-ui/react';
 
 const User = ({myStatistics}) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const [sureToDelete, setSureToDelete] = useState(false)
-
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const [username, setUsername] = useState("")
     const [loading,setLoading] = useState(false)
 
@@ -37,12 +37,14 @@ const User = ({myStatistics}) => {
     useEffect(() => {
         const loadStats = async () => {
             setLoading(false);
-            if(!localStorage.getItem('sudokuUser'))
+            if(!localStorage.getItem('sudokuUser')){
                 navigate('/login')
-            else
+            }
+            else{
                 await dispatch(getMyStatistics())
                 let decodedToken = jwtDecode(JSON.parse(localStorage.getItem('sudokuUser')).token)
                 setUsername(decodedToken?.username)
+            }
             setLoading(true);
         };
         loadStats();
@@ -67,68 +69,76 @@ const User = ({myStatistics}) => {
   return (
     <>
         <Navbar />
-        <Center gap={50}>
-            <Center height='700px'>
-                <Flex direction='column' alignItems='center' gap={4}>
-                    <Box 
-                        bg='teal.500' as='button' paddingBottom={5}
-                        width='250px' height='250px' borderRadius='125px'
-                        display='flex' justifyContent='center' alignItems='center' 
-                        fontSize='200px' fontWeight='500'>
-                        {initial()}
+        <Container maxW='container.xl'>
+            <Center mt={["50px","150px"]}>
+                <Flex direction={["column","row"]} gap={["10px","50px"]}>
+                <Center>
+                    <Flex direction='column' alignItems='center' gap={4}>
+                        <Box 
+                            bg='teal.500' as='button' paddingBottom={5}
+                            width='250px' height='250px' borderRadius='125px'
+                            display='flex' justifyContent='center' alignItems='center' 
+                            fontSize='200px' fontWeight='500'>
+                            {initial()}
+                        </Box>
+                        <Text fontWeight='500' fontSize='25px'>{getUsername()}</Text>
+                    </Flex>
+                </Center>
+                <Center>
+                    <Box>
+                    <Heading mb={4}>Total Sudoku Solved:</Heading>
+                    <Skeleton isLoaded={loading}>
+                        <SimpleGrid columns={[2,2,4]} spacing={10}>
+                            <Stat>
+                                <StatLabel color='green'>Easy:</StatLabel>
+                                <StatNumber>{myStatistics[0]}</StatNumber>
+                            </Stat>
+                            <Stat>
+                                <StatLabel color='yellow'>Medium:</StatLabel>
+                                <StatNumber>{myStatistics[1]}</StatNumber>
+                            </Stat>
+                            <Stat>
+                                <StatLabel color='orange'>Hard:</StatLabel>
+                                <StatNumber>{myStatistics[2]}</StatNumber>
+                            </Stat>
+                            <Stat>
+                                <StatLabel color='red'>Extreme:</StatLabel>
+                                <StatNumber>{myStatistics[3]}</StatNumber>
+                            </Stat>
+                        </SimpleGrid>
+                    </Skeleton>
+                        <ButtonGroup gap='2'>
+                            <Button size='lg' colorScheme='red' mt='24px' onClick={logout}>
+                                Log out
+                            </Button>
+                            <Button size='lg' colorScheme='red' mt='24px' onClick={()=>{onOpen()}}>
+                                Delete Account
+                            </Button>
+                        </ButtonGroup>
                     </Box>
-                    <Text fontWeight='500' fontSize='25px'>{getUsername()}</Text>
+                </Center>
                 </Flex>
+                <Modal isCentered isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(2px)'/>
+                    <ModalContent>
+                    <Center>
+                    <ModalBody>
+                        <Center><Heading size='md'>Delete Account</Heading></Center>
+                        <Center mt="10px"><Text>Are you sure you want to delete your account?</Text></Center>
+                    </ModalBody>
+                    </Center>
+                    <Center>
+                    <ModalFooter>
+                        <Stack direction='row' spacing={4}>
+                            <Button w="100px" colorScheme='green' onClick={onClose}>No</Button>
+                            <Button w="100px" colorScheme='red' onClick={handleDeleteAccount}>Yes</Button>
+                        </Stack>
+                    </ModalFooter>
+                    </Center>
+                    </ModalContent>
+                </Modal>
             </Center>
-            <Center height='700px' width='500px'>
-                <Box>
-                <Heading mb={4}>Total Sudoku Solved:</Heading>
-                <Skeleton isLoaded={loading}>
-                    <StatGroup gap={100}>
-                        <Stat>
-                            <StatLabel color='green'>Easy:</StatLabel>
-                            <StatNumber>{myStatistics[0]}</StatNumber>
-                        </Stat>
-                        <Stat>
-                            <StatLabel color='yellow'>Medium:</StatLabel>
-                            <StatNumber>{myStatistics[1]}</StatNumber>
-                        </Stat>
-                        <Stat>
-                            <StatLabel color='orange'>Hard:</StatLabel>
-                            <StatNumber>{myStatistics[2]}</StatNumber>
-                        </Stat>
-                        <Stat>
-                            <StatLabel color='red'>Extreme:</StatLabel>
-                            <StatNumber>{myStatistics[3]}</StatNumber>
-                        </Stat>
-                    </StatGroup>
-                </Skeleton>
-                    <ButtonGroup gap='2'>
-                        <Button size='lg' colorScheme='red' mt='24px' onClick={logout}>
-                            Log out
-                        </Button>
-                        <Button size='lg' colorScheme='red' mt='24px' onClick={handleSureToDelete}>
-                            Delete Account
-                        </Button>
-                    </ButtonGroup>
-                </Box>
-            </Center>
-            { sureToDelete ?
-                (
-                    <>
-                    <div className='opacity-popup'></div>
-                        <div id="sureToDeleteAccount">
-                            <h2>We are sorry you want to go...</h2>
-                            <p>Are you sure you want to delete your account?</p>
-                            <div id="deleteAccountButtonsContainer">
-                                <button id="yesDeleteAccountButton" onClick={handleDeleteAccount}>Yes</button>
-                                <button id="noDeleteAccountButton" onClick={handleSureToDelete}>No</button>
-                            </div>
-                        </div>
-                    </>
-                ) : (<></>)
-                }
-        </Center>
+        </Container>
     </>
   )
 }
