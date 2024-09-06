@@ -21,8 +21,6 @@ const App = () => {
   return (
     <>
         <BrowserRouter>
-          {/* <Navbar /> */}
-          
             <Controller />
             <Routes>
               <Route path="/" element={<Landing />}></Route>
@@ -30,10 +28,7 @@ const App = () => {
               <Route path="/signup" element={<Signup />}></Route>
               <Route path="/game" element={<Game />}></Route>
               <Route path="/myprofile" element={<User />} />
-              {/* <Route path="/stat" element={<Stat />} /> */}
-              {/* <Route path="/user/:username" element={<User />}></Route> */}
             </Routes>
-
             <BottomBanner />
         </BrowserRouter>
     </>

@@ -8,8 +8,7 @@ import { useStopwatch } from 'react-timer-hook';
 import { ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Box, Square, Stack, SimpleGrid, Center, Container, useDisclosure, Modal, ModalOverlay, 
     ModalContent, ModalHeader, ModalFooter, Button, Text, HStack, Menu, MenuButton, MenuList, MenuItem, 
-    Heading,
-    Spinner} from '@chakra-ui/react'
+    Heading,Spinner} from '@chakra-ui/react'
 import { ModalBody } from 'react-bootstrap'
 
 const Game = ({sudoku}) => {
@@ -138,7 +137,7 @@ const Game = ({sudoku}) => {
         if (sudokuIsCompleted()) {
             pause();
             onOpen();
-            if (sudokuIsRight && await validateinServer()) {
+            if (sudokuIsRight() && await validateinServer()) {
                 setResultModal("Sudoku Completed!");
                 setResultLoading(false);
                 sessionStorage.removeItem('currentSudoku');

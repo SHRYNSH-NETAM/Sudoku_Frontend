@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API = axios.create({baseURL: "http://192.168.31.225:8000/api/v1"})
+const API = axios.create({baseURL: "https://sudoku-backend-golang.vercel.app/api/v1"})
 
 API.interceptors.request.use((req) => {
     if(localStorage.getItem('sudokuUser')) {
