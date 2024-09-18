@@ -121,7 +121,7 @@ const Game = ({sudoku}) => {
 
     const validateinServer = async () => {
         if(!localStorage.sudokuUser) return true;
-        const valid = await dispatch(validateSudoku({gridToBeFilled: sudoku.gridToBeFilled, history: JSON.parse(sessionStorage.getItem('currentSudoku')).history}));
+        const valid = await dispatch(validateSudoku({grid: sudoku.grid, gridToBeFilled: sudoku.gridToBeFilled, gridWithBlanks: sudoku.gridWithBlanks, history: JSON.parse(sessionStorage.getItem('currentSudoku')).history}));
         return valid
     }
 
@@ -207,6 +207,10 @@ const Game = ({sudoku}) => {
         };
         sessionStorage.setItem('currentSudoku', JSON.stringify(newSudoku))
         dispatch({type:"SET_SUDOKU", data: newSudoku})
+    }
+
+    const handleSolve = () => {
+
     }
     
     return (
@@ -327,6 +331,7 @@ const Game = ({sudoku}) => {
                                 <Square _hover={{background: "red.100",color: "red.500", borderWidth: "3px", borderColor: "red.500",}} borderRadius="7.5px" as="button" size='50px' bg='red.500' color='white' fontSize="25px" onClick={() => updateSudokuGrid(0, sudoku)}><DeleteIcon /></Square>
                             </SimpleGrid>
                             <SimpleGrid columns={[2,1]} spacing='15px' mt="15px" w={[325, 300]}>
+                                {/* <Button onClick={()=>handleSolve()}>Solve</Button> */}
                                 <Button onClick={()=>handleReset()}>Reset</Button>
                                 <Menu>
                                     {({ isOpen }) => (
